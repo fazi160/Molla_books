@@ -1,0 +1,159 @@
+{% load static %}
+<header class="header header-12">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+      
+
+    <div class="header-middle">
+        <div class="container">
+            <div class="header-left">
+                <button class="mobile-menu-toggler">
+                    <span class="sr-only">Toggle mobile menu</span>
+                    <i class="icon-bars"></i>
+                </button>
+
+                <a href="{% url 'home' %}" class="logo">
+                    <img src="{% static 'user/images/demos/demo-20/logo.png' %}" alt="Molla Logo" width="105" height="25">
+                </a>
+            </div><!-- End .header-left -->
+
+            
+            <!-- search bar -->
+            <div class="header-right">
+                <div class="header-search header-search-extended header-search-visible header-search-no-radius">
+                    <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                    <form action="{% url 'search' %}">
+                        <div class="header-search header-search-extended header-search-visible header-search-no-radius">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                            <div class="header-search-wrapper search-wrapper-wide">
+                                <label for="q" class="sr-only">Search</label>
+                                <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." required>
+                                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                
+                                <!-- Suggestions dropdown -->
+                                <div id="suggestions-dropdown" style="display: none;">
+                                    <ul id="suggestions"></ul>
+                                </div>
+                            </div><!-- End .header-search-wrapper -->
+                        </div><!-- End .header-search -->
+                    </form>
+                </div><!-- End .header-search -->
+                
+                
+                <div class="header-right" style="text-align: left;">
+                    <div style="display: inline-block; margin-right: 10px;">
+                        <div class="wishlist">
+                            <!-- button for wishlist -->
+                            <a href="{% url 'wishlist' %}" title="Wishlist">
+                                <div class="icon">
+                                    <i class="icon-heart-o"></i>
+                                    <span class="wishlist-count badge">{{ wishlist_count }}</span>
+                                </div>
+                                <p style="display: inline-block;">Wishlist</p>
+                            </a>
+                        </div><!-- End .wishlist -->
+                    </div>
+                
+                    <div style="display: inline-block;">
+                        <div class="dropdown cart-dropdown">
+                            <!-- button for cart -->
+                            <a href="{% url 'cart' %}" class="dropdown-toggle" role="button">
+                                <div class="icon">
+                                    <i class="icon-shopping-cart"></i>
+                                    <span class="cart-count">{{ cart_count }}</span>
+                                </div>
+                                <p style="display: inline-block;">Cart</p>
+                            </a>
+                        </div> 
+                    </div>
+                </div><!-- End .header-right -->
+                    
+                </div>
+            </div><!-- End .header-right -->
+        </div><!-- End .container -->
+    </div><!-- End .header-middle -->
+
+    <div class="header-bottom sticky-header">
+        <div class="container">
+            <div style="background-color: #333; display: flex; width: 100%;">   
+               <!-- End .header-left -->
+
+               <div class="header-center">
+                <nav class="main-nav">
+                    <ul class="menu sf-arrows">
+                        <li class="{% if request.path == '/' %}active{% endif %}">
+                            <a href="{% url 'home' %}" class="with-ul">Home</a>
+                        </li>
+                        <li class="{% if request.path == '/shop/' %}active{% endif %}">
+                            <a href="{% url 'shop' %}">Shop</a>
+                        </li>
+                        <li class="{% if request.path == '/product_show/' %}active{% endif %}">
+                            <a href="{% url 'product_show' %}">Product</a>
+                        </li>
+       
+                        <li class="{% if request.path == '/blog_show/' %}active{% endif %}">
+                            <a href="{% url 'blog_show' %}">Blog</a>  
+                        </li>
+                        {% if user.id is not None %}
+                        <li class="{% if request.path == '/user_logout/' %}active{% endif %}">
+                            <a href="{% url 'user_logout' %}">Logout</a>
+                        </li>
+                        <li class="{% if request.path == '/profile/' %}active{% endif %}">
+                            <a href="{% url 'user_profile' %}">Dashboard</a>  
+                        </li>
+                        {% else %}
+                        <li class="{% if request.path == '/user_login/' %}active{% endif %}">
+                            <a href="{% url 'user_login' %}">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav><!-- End .main-nav -->
+            </div>
+
+                
+            </div>
+        </div><!-- End .container -->
+    </div><!-- End .header-bottom -->
+</header><!-- End .header -->
+
+<div>
+    <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+    <div class="mobile-menu-container">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+</div>
+
+<script>
+  // Function to update the wishlist and cart counts
+  function updateCounts() {
+    $.ajax({
+      url: "{% url 'update_counts' %}", // Replace 'update_counts' with the actual URL for updating counts in your Django views
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        // Update wishlist count
+        $(".wishlist-count").text(data.wishlist_count);
+        
+        // Update cart count
+        $(".cart-count").text(data.cart_count);
+      },
+      error: function (xhr, status, error) {
+        console.error(error);
+      }
+    });
+  }
+
+  // Call the updateCounts function initially to populate the counts on page load
+  updateCounts();
+
+  // Set an interval to update the counts every few seconds (adjust the time as per your requirement)
+  setInterval(updateCounts, 1000); // 1000 milliseconds = 5 seconds
+</script>
