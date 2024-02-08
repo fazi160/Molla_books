@@ -17,16 +17,16 @@ from django.template.loader import render_to_string
 
 def home(request):
 
-    pro=Product.objects.all()
-    cate=category.objects.all()
+    pro = Product.objects.all()
+    cate = category.objects.all()
     auth = author.objects.all()
-    if Product.objects.latest('id'):
-        last_added = Product.objects.latest('id')
-    else:
-        return render(request,'home.html',{'products_list':pro, 'categories':cate, 'authors':auth})
+    last_added = None
+    
+    if pro.exists():
+        last_added = pro.latest('id')
 
+    return render(request, 'home.html', {'products_list': pro, 'categories': cate, 'authors': auth, 'last_added': last_added})
 
-    return render(request,'home.html',{'products_list':pro, 'categories':cate, 'authors':auth, 'last_added':last_added})
 
 def shop(request):
     cate=category.objects.all()
