@@ -207,7 +207,7 @@
                             <!-- New product field -->
                             <div class="product-big">
                                 <img src="{% static 'user/images/demos/demo-20/products/product-big-1-bg.jpg' %}" alt="product bg img">
-
+                                {% if last_added %}
                                 <div class="product-wrap">
                                     <figure class="product-media">
                                         <a href="{% url 'product_detail' last_added.id %}">
@@ -233,8 +233,9 @@
             
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product-wrap -->
-                            </div><!-- End .product-big -->
 
+                         </div><!-- End .product-big -->
+                            {% endif %}
                             <!-- End .product-big -->
                         </div><!-- End .owl-carousel -->
 

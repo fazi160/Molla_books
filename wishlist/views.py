@@ -7,7 +7,7 @@ from django.views.decorators.cache import cache_control
 from django.http.response import JsonResponse
 from products.models import Product
 
-# # Create your views here.
+# Create your views here.
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='user_login')
 def wishlist(request):

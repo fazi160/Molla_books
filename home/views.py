@@ -20,7 +20,11 @@ def home(request):
     pro=Product.objects.all()
     cate=category.objects.all()
     auth = author.objects.all()
-    last_added = Product.objects.latest('id')
+    if Product.objects.latest('id'):
+        last_added = Product.objects.latest('id')
+    else:
+        return render(request,'home.html',{'products_list':pro, 'categories':cate, 'authors':auth})
+
 
     return render(request,'home.html',{'products_list':pro, 'categories':cate, 'authors':auth, 'last_added':last_added})
 
